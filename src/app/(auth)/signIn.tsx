@@ -16,8 +16,10 @@ export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
 
-  const [emailAddress, setEmailAddress] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
+  const [state, setState] = React.useState({
+    emailAddress: "",
+    password: "",
+  });
 
   // Handle the submission of the sign-in form
   const onSignInPress = React.useCallback(async () => {
@@ -26,8 +28,8 @@ export default function Page() {
     // Start the sign-in process using the email and password provided
     try {
       const signInAttempt = await signIn.create({
-        identifier: emailAddress,
-        password,
+        identifier: state.emailAddress,
+        password: state.password,
       });
 
       // If sign-in process is complete, set the created session as active
@@ -45,7 +47,7 @@ export default function Page() {
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
-  }, [isLoaded, emailAddress, password]);
+  }, [isLoaded, state.emailAddress, state.password]);
 
   return (
     <KeyboardAvoidingView
@@ -56,18 +58,28 @@ export default function Page() {
       <TextInput
         style={styles.input}
         autoCapitalize="none"
-        value={emailAddress}
+        value={state.emailAddress}
         placeholder="Enter email"
         placeholderTextColor="#aaa"
-        onChangeText={setEmailAddress}
+        onChangeText={(text) =>
+          setState((prevState) => ({
+            ...prevState,
+            emailAddress: text,
+          }))
+        }
       />
       <TextInput
         style={styles.input}
-        value={password}
+        value={state.password}
         placeholder="Enter password"
         placeholderTextColor="#aaa"
         secureTextEntry
-        onChangeText={setPassword}
+        onChangeText={(text) =>
+          setState((prevState) => ({
+            ...prevState,
+            password: text,
+          }))
+        }
       />
       <Button title="Sign In" onPress={onSignInPress} />
       <View style={styles.signUpContainer}>
