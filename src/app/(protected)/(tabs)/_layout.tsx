@@ -2,12 +2,13 @@ import { useAuth } from "@clerk/clerk-expo";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
-export default function TabLayout() {
+export default function TabsLayout() {
   const { signOut } = useAuth();
 
   return (
     <Tabs
       screenOptions={{
+        headerTitleAlign: "center",
         tabBarActiveTintColor: "#000000",
         headerRight: () => (
           <Feather

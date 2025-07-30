@@ -1,25 +1,23 @@
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
-import React from "react";
 import {
-  Button,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
+  View,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  StyleSheet,
+  Button,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import React from "react";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
 
-  const [state, setState] = React.useState({
-    emailAddress: "",
-    password: "",
-  });
+  const [emailAddress, setEmailAddress] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
 
   // Handle the submission of the sign-in form
   const onSignInPress = React.useCallback(async () => {
@@ -28,8 +26,8 @@ export default function Page() {
     // Start the sign-in process using the email and password provided
     try {
       const signInAttempt = await signIn.create({
-        identifier: state.emailAddress,
-        password: state.password,
+        identifier: emailAddress,
+        password,
       });
 
       // If sign-in process is complete, set the created session as active
@@ -47,7 +45,7 @@ export default function Page() {
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
-  }, [isLoaded, state.emailAddress, state.password]);
+  }, [isLoaded, emailAddress, password]);
 
   return (
     <KeyboardAvoidingView
@@ -58,28 +56,18 @@ export default function Page() {
       <TextInput
         style={styles.input}
         autoCapitalize="none"
-        value={state.emailAddress}
+        value={emailAddress}
         placeholder="Enter email"
         placeholderTextColor="#aaa"
-        onChangeText={(text) =>
-          setState((prevState) => ({
-            ...prevState,
-            emailAddress: text,
-          }))
-        }
+        onChangeText={setEmailAddress}
       />
       <TextInput
         style={styles.input}
-        value={state.password}
+        value={password}
         placeholder="Enter password"
         placeholderTextColor="#aaa"
         secureTextEntry
-        onChangeText={(text) =>
-          setState((prevState) => ({
-            ...prevState,
-            password: text,
-          }))
-        }
+        onChangeText={setPassword}
       />
       <Button title="Sign In" onPress={onSignInPress} />
       <View style={styles.signUpContainer}>

@@ -14,13 +14,12 @@ export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
 
-  const [state, setState] = React.useState({
-    emailAddress: "",
-    username: "",
-    password: "",
-    pendingVerification: false,
-    code: "",
-  });
+  const [emailAddress, setEmailAddress] = React.useState<string>("");
+  const [username, setUsername] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [pendingVerification, setPendingVerification] =
+    React.useState<boolean>(false);
+  const [code, setCode] = React.useState<string>("");
 
   // Handle submission of sign-up form
   const onSignUpPress = async () => {
@@ -28,10 +27,10 @@ export default function SignUpScreen() {
 
     // Start sign-up process using email and password provided
     try {
+      console.log({ emailAddress, password });
       await signUp.create({
-        emailAddress: state.emailAddress,
-        username: `u/${state.username}`,
-        password: state.password,
+        emailAddress,
+        password,
       });
 
       // Send user an email with verification code
@@ -39,7 +38,7 @@ export default function SignUpScreen() {
 
       // Set 'pendingVerification' to true to display second form
       // and capture OTP code
-      setState((prevState) => ({ ...prevState, pendingVerification: true }));
+      setPendingVerification(true);
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
@@ -54,7 +53,7 @@ export default function SignUpScreen() {
     try {
       // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
-        code: state.code,
+        code,
       });
 
       // If verification was completed, set the session to active
@@ -74,7 +73,7 @@ export default function SignUpScreen() {
     }
   };
 
-  if (state.pendingVerification) {
+  if (pendingVerification) {
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -83,10 +82,10 @@ export default function SignUpScreen() {
         <Text style={styles.title}>Verify Your Email</Text>
         <TextInput
           style={styles.input}
-          value={state.code}
+          value={code}
           placeholder="Enter your verification code"
           placeholderTextColor="#aaa"
-          onChangeText={(text) => setState({ ...state, code: text })}
+          onChangeText={setCode}
         />
         <Button title="Verify" onPress={onVerifyPress} />
       </KeyboardAvoidingView>
@@ -102,26 +101,26 @@ export default function SignUpScreen() {
       <TextInput
         style={styles.input}
         autoCapitalize="none"
-        value={state.emailAddress}
+        value={emailAddress}
         placeholder="Enter email"
         placeholderTextColor="#aaa"
-        onChangeText={(text) => setState({ ...state, emailAddress: text })}
+        onChangeText={setEmailAddress}
       />
       <TextInput
         style={styles.input}
         autoCapitalize="none"
-        value={state.username}
+        value={username}
         placeholder="Username"
         placeholderTextColor="#aaa"
-        onChangeText={(text) => setState({ ...state, username: text })}
+        onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
-        value={state.password}
+        value={password}
         placeholder="Enter password"
         placeholderTextColor="#aaa"
         secureTextEntry
-        onChangeText={(text) => setState({ ...state, password: text })}
+        onChangeText={setPassword}
       />
       <Button title="Continue" onPress={onSignUpPress} />
     </KeyboardAvoidingView>
