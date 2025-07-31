@@ -13,41 +13,24 @@ export default function PostListItem({
   post,
   isDetailedPost,
 }: PostListItemProps) {
+  const shouldShowImage = isDetailedPost || post.image;
+  const shouldShowDescription = isDetailedPost || !post.image;
+
   return (
     <Link href={`/post/${post.id}`}>
-      <View
-        style={{
-          paddingHorizontal: 15,
-          paddingVertical: 10,
-          gap: 7,
-          borderBottomColor: "lightgrey",
-          borderBottomWidth: 0.5,
-          backgroundColor: "white",
-        }}
-      >
+      <View style={styles.container}>
         {/* HEADER */}
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            source={{ uri: post.group.image }}
-            style={{ width: 20, height: 20, borderRadius: 10, marginRight: 5 }}
-          />
+        <View style={styles.headerContainer}>
+          <Image source={{ uri: post.group.image }} style={styles.groupImage} />
           <View>
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text
-                style={{ fontWeight: "bold", fontSize: 13, color: "#3A3B3C" }}
-              >
-                {post.group.name}
-              </Text>
-              <Text
-                style={{ color: "grey", fontSize: 13, alignSelf: "flex-start" }}
-              >
+              <Text style={styles.groupName}>{post.group.name}</Text>
+              <Text style={styles.createdAt}>
                 {formatDistanceToNowStrict(new Date(post.created_at))}
               </Text>
             </View>
             {isDetailedPost && (
-              <Text style={{ fontSize: 13, color: "#2E5DAA" }}>
-                {post.user.name}
-              </Text>
+              <Text style={styles.username}>{post.user.name}</Text>
             )}
           </View>
           <Pressable
@@ -58,17 +41,7 @@ export default function PostListItem({
               borderRadius: 10,
             }}
           >
-            <Text
-              style={{
-                color: "white",
-                paddingVertical: 2,
-                paddingHorizontal: 7,
-                fontWeight: "bold",
-                fontSize: 13,
-              }}
-            >
-              Join
-            </Text>
+            <Text style={styles.joinBtn}>Join</Text>
           </Pressable>
         </View>
 
@@ -76,14 +49,14 @@ export default function PostListItem({
         <Text style={{ fontWeight: "bold", fontSize: 17, letterSpacing: 0.5 }}>
           {post.title}
         </Text>
-        {post.image && (
+        {shouldShowImage && post.image && (
           <Image
             source={{ uri: post.image }}
             style={{ width: "100%", aspectRatio: 4 / 3, borderRadius: 15 }}
           />
         )}
 
-        {post.description && !post.image && (
+        {shouldShowDescription && post.description && (
           <Text numberOfLines={isDetailedPost ? undefined : 4}>
             {post.description}
           </Text>
@@ -107,15 +80,7 @@ export default function PostListItem({
               >
                 {post.upvotes}
               </Text>
-              <View
-                style={{
-                  width: 1,
-                  backgroundColor: "#D4D4D4",
-                  height: 14,
-                  marginHorizontal: 7,
-                  alignSelf: "center",
-                }}
-              />
+              <View style={styles.downVotes} />
               <MaterialCommunityIcons
                 name="arrow-down-bold-outline"
                 size={19}
@@ -160,11 +125,38 @@ export default function PostListItem({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    gap: 7,
+    borderBottomColor: "lightgrey",
+    borderBottomWidth: 0.5,
+    backgroundColor: "white",
+  },
+  headerContainer: { flexDirection: "row", alignItems: "center" },
+  groupImage: { width: 20, height: 20, borderRadius: 10, marginRight: 5 },
+  groupName: { fontWeight: "bold", fontSize: 13, color: "#3A3B3C" },
+  createdAt: { color: "grey", fontSize: 13, alignSelf: "flex-start" },
+  username: { fontSize: 13, color: "#2E5DAA" },
+  joinBtn: {
+    color: "white",
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+    fontWeight: "bold",
+    fontSize: 13,
+  },
   iconBox: {
     borderWidth: 0.5,
     borderColor: "#D4D4D4",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 20,
+  },
+  downVotes: {
+    width: 1,
+    backgroundColor: "#D4D4D4",
+    height: 14,
+    marginHorizontal: 7,
+    alignSelf: "center",
   },
 });
