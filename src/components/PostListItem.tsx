@@ -61,7 +61,6 @@ export default function PostListItem({
             {post.description}
           </Text>
         )}
-
         {/* FOOTER */}
         <View style={{ flexDirection: "row" }}>
           <View style={{ flexDirection: "row", gap: 10 }}>
@@ -72,11 +71,7 @@ export default function PostListItem({
                 color="black"
               />
               <Text
-                style={{
-                  fontWeight: "500",
-                  marginLeft: 5,
-                  alignSelf: "center",
-                }}
+                style={styles.votesText}
               >
                 {post.upvotes}
               </Text>
@@ -94,11 +89,7 @@ export default function PostListItem({
                 color="black"
               />
               <Text
-                style={{
-                  fontWeight: "500",
-                  marginLeft: 5,
-                  alignSelf: "center",
-                }}
+                style={styles.votesText}
               >
                 {post.nr_of_comments}
               </Text>
@@ -159,4 +150,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 7,
     alignSelf: "center",
   },
+  votesText: {
+                  fontWeight: "500",
+                  marginLeft: 5,
+                  alignSelf: "center",
+                }
 });
