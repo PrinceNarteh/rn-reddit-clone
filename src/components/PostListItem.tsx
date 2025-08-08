@@ -70,11 +70,7 @@ export default function PostListItem({
                 size={19}
                 color="black"
               />
-              <Text
-                style={styles.votesText}
-              >
-                {post.upvotes}
-              </Text>
+              <Text style={styles.votesText}>{post.upvotes}</Text>
               <View style={styles.downVotes} />
               <MaterialCommunityIcons
                 name="arrow-down-bold-outline"
@@ -88,11 +84,7 @@ export default function PostListItem({
                 size={19}
                 color="black"
               />
-              <Text
-                style={styles.votesText}
-              >
-                {post.nr_of_comments}
-              </Text>
+              <Text style={styles.votesText}>{post.nr_of_comments}</Text>
             </View>
           </View>
           <View style={{ marginLeft: "auto", flexDirection: "row", gap: 10 }}>
@@ -151,8 +143,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   votesText: {
-                  fontWeight: "500",
-                  marginLeft: 5,
-                  alignSelf: "center",
-                }
+    fontWeight: "500",
+    marginLeft: 5,
+    alignSelf: "center",
+  },
 });
